@@ -1,4 +1,3 @@
-
 import uuid
 
 print("Welcome to the Demo Marketplace")
@@ -95,21 +94,6 @@ def payment(session_id, p):
     print("Your order is successfully placed with {'p'} total price: ", total)
 
 
-def number_choice(c):
-    session_id = None
-    if c == "1":
-        u = input("Enter username: ")
-        p = input("Enter password: ")
-        session_id = user_login(u, p)
-    elif c == "2":
-        a = input("Enter admin name: ")
-        p = input("Enter password: ")
-        session_id = admin_login(a, p)
-    else:
-        print("Invalid choice")
-    return session_id
-
-
 def product(p):
     if p.lower() == "yes":
         for item in product_catalog:
@@ -120,28 +104,54 @@ def product(p):
         print("What can I serve you?")
 
 
+def number_choice(c):
+    session_id = None
+    i = input("Do you want to show the catalog? (yes or no): ")
+    product(i)
+   
+    if c == "1":
+        u = input("Enter username: ")
+        p = input("Enter password: ")
+        session_id = user_login(u, p)
+        if session_id:
+      
+        
+         while True:
+          action = input("What would you like to do? (view cart, add to cart, remove from cart, payment ,exit): ")
+          if action == "view cart":
+               view_cart(session_id)
+          elif action == "add to cart":
+               product_id = int(input("Enter product ID: "))
+               quantity = int(input("Enter quantity: "))
+               add_to_cart(session_id, product_id, quantity)
+          elif action == "remove from cart":
+               product_id = int(input("Enter product ID: "))
+               remove_from_cart(session_id, product_id)
+          elif action == "payment":
+               p = input("enter your choice form payment : Net banking, PayPal, UPI")
+               payment(session_id, p)
+          elif action == "exit":
+               break
+          else:
+               print("Invalid action. Please try again.")
+        
+
+    elif c == "2":
+        a = input("Enter admin name: ")
+        p = input("Enter password: ")
+        session_id = admin_login(a, p)
+        
+    else:
+        print("Invalid choice")
+    return session_id
+
+
+
 j = input("If you're a user, enter 1. If you're an admin, enter 2: ")
 session_id = number_choice(j)
 
-if session_id:
-    i = input("Do you want to show the catalog? (yes or no): ")
-    product(i)
 
-    while True:
-        action = input("What would you like to do? (view_cart, add_to_cart, remove_from_cart, payment ,exit): ")
-        if action == "view_cart":
-            view_cart(session_id)
-        elif action == "add_to_cart":
-            product_id = int(input("Enter product ID: "))
-            quantity = int(input("Enter quantity: "))
-            add_to_cart(session_id, product_id, quantity)
-        elif action == "remove_from_cart":
-            product_id = int(input("Enter product ID: "))
-            remove_from_cart(session_id, product_id)
-        elif action == "payment":
-            p = input("enter your choice form payment : Net banking, PayPal, UPI")
-            payment(session_id, p)
-        elif action == "exit":
-            break
-        else:
-            print("Invalid action. Please try again.")
+
+
+
+

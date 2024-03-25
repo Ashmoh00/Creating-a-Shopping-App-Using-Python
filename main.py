@@ -94,20 +94,52 @@ def payment(session_id, p):
     print("Your order is successfully placed with {'p'} total price: ", total)
 
 
-def product(p):
-    if p.lower() == "yes":
+def product():
         for item in product_catalog:
             for key, value in item.items():
                 print(f"{key}: {value}")
             print()  # Empty line between products
-    else:
-        print("What can I serve you?")
+   
+        
+
+
+
+def add_product(session_id , product_id, name ,category, price):
+    
+    product_catalog.append( {"ID":product_id , "Name": name, "Category": category, "Price": price })
+
+
+
+def mod_product(session_id,aproduct_id):
+    for product in product_catalog:
+        if product["ID"] == product_id:
+            field_to_modify = input("Enter the field you want to modify (Name, Category, Price): ").strip().capitalize()
+            new_value = input(f"Enter the new value for {field_to_modify}: ")
+            if field_to_modify in product:
+                product[field_to_modify] = new_value
+                print("Product modified successfully.")
+                return
+            else:
+                print("Invalid field. Please try again.")
+                return
+    print("Product ID not found.")
+
+
+def remove_product(session_id, product_id):
+
+    for product in product_catalog:
+        if product["ID"] == product_id:
+            product_catalog.remove(product)
+            print("Product removed from catalog successfully.")
+            return
+    print("Product ID not found in the catalog.")
+
 
 
 def number_choice(c):
     session_id = None
-    i = input("Do you want to show the catalog? (yes or no): ")
-    product(i)
+   
+    
    
     if c == "1":
         u = input("Enter username: ")
@@ -117,19 +149,26 @@ def number_choice(c):
       
         
          while True:
-          action = input("What would you like to do? (view cart, add to cart, remove from cart, payment ,exit): ")
+          action = input("What would you like to do? (view catalog, view cart, add to cart, remove from cart, payment ,exit): ")
           if action == "view cart":
                view_cart(session_id)
+
           elif action == "add to cart":
                product_id = int(input("Enter product ID: "))
                quantity = int(input("Enter quantity: "))
                add_to_cart(session_id, product_id, quantity)
+
           elif action == "remove from cart":
                product_id = int(input("Enter product ID: "))
                remove_from_cart(session_id, product_id)
+
           elif action == "payment":
                p = input("enter your choice form payment : Net banking, PayPal, UPI")
                payment(session_id, p)
+
+          elif action =="view catalog":
+               product()
+
           elif action == "exit":
                break
           else:
@@ -140,6 +179,34 @@ def number_choice(c):
         a = input("Enter admin name: ")
         p = input("Enter password: ")
         session_id = admin_login(a, p)
+        if session_id:
+      
+        
+         while True:
+          action = input("What would you like to do? (view catalog:1, add product:2, modify product:3, remove product:4, exit:5): ")
+
+          if action == "2":
+               product_id = input("enter product id: ")
+               name = input("enter product name: ")
+               category = input("enter category: ")
+               price = input ("enter price of product: ")
+               add_product(session_id , product_id, name ,category, price)
+
+          elif action == "3":
+               product_id = int(input("Enter product ID: "))
+               mod_product(session_id,product_id)
+
+          elif action == "4":
+               product_id = int(input("Enter product ID: "))
+               remove_product(session_id, product_id)
+
+          elif action =="1":
+              product()
+
+          elif action == "5":
+               break
+          else:
+               print("Invalid action. Please try again.")
         
     else:
         print("Invalid choice")
@@ -149,9 +216,5 @@ def number_choice(c):
 
 j = input("If you're a user, enter 1. If you're an admin, enter 2: ")
 session_id = number_choice(j)
-
-
-
-
 
 
